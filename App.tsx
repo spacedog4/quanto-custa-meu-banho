@@ -1,16 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import Constants from 'expo-constants';
-import { ImageBackground, Text, View, Image } from 'react-native';
+import { ImageBackground, Text, View, Image, Dimensions } from 'react-native';
 
 import styled from 'styled-components/native';
 
 const showerIcon = require('./src/assets/chuveiro-icon.png');
 const heroBackground = require('./src/assets/hero-background.png');
 
+const width = Dimensions.get('window').width
+
 export default function App() {
   return (
-    <Container source={heroBackground} resizeMode="cover">
+    <Container source={heroBackground} resizeMode="contain" imageStyle={{ top: undefined, height: 600, width: width / 1.2, alignSelf: 'flex-end', backgroundColor: 'red' }}>
         <Image source={showerIcon} />
         <Title>Quanto custa meu banho?</Title>
         <SubTitle>Calcule quanto você está gastando para tomar banho</SubTitle>
