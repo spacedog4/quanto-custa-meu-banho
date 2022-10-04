@@ -1,8 +1,8 @@
 import React from 'react';
-import IntroductionPage from './src/pages/Introduction';
+import Route from './src/routes/route';
 
 export default function App() {
     return (
-        <IntroductionPage />
+        <Route />
     );
 }
