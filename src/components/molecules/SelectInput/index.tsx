@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
   View,
   Modal,
@@ -32,6 +32,8 @@ export type OptionType = {
 
 export default function SelectInput({placeholder, onChange, title, options}: Props) {
   const [visible, setVisible] = useState(false);
+  const [q, setQ] = useState('');
+  const [filteredOptions, setFilteredOptions] = useState<OptionType[]>([]);
   const [selectedOption, setSelectedOption] = useState<
     OptionType | undefined
   >();
@@ -45,6 +47,16 @@ export default function SelectInput({placeholder, onChange, title, options}: Pro
 
     onChange(item);
   }
+
+  useEffect(() => {
+    setFilteredOptions(options)
+  }, [options])
+
+  useEffect(() => {
+    setFilteredOptions(options.filter(item => {
+      return item.title.toLowerCase().includes(q.toLowerCase())
+    }))
+  }, [q])
 
   const renderModalOption: ListRenderItem<OptionType> = ({item}) => {
     return (
@@ -76,10 +88,10 @@ export default function SelectInput({placeholder, onChange, title, options}: Pro
                 <HeanderBackText>concluir</HeanderBackText>
               </HeanderBack>
             </HeaderUpper>
-            <SearchInput placeholder="Pesquisar"></SearchInput>
+            <SearchInput placeholder="Pesquisar" onChangeText={text => setQ(text)}></SearchInput>
           </Header>
           <ModalOptions
-            data={options}
+            data={filteredOptions}
             renderItem={renderModalOption}
             keyExtractor={(item: OptionType) => String(item.id)}
           />
