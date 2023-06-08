@@ -1,14 +1,14 @@
 import React from 'react';
 import ShowerIcon from '../../atoms/ShowerIcon';
-import IntroductionTitle from '../../atoms/IntroductionTitle';
 import IntroductionSubTitle from '../../atoms/IntroductionSubTitle';
 import ShowerTube from '../../atoms/ShowerTube';
+import HeadingTitle from '../../atoms/HeadingTitle';
 
 export default function IntroductionMessage() {
     return (
         <>
             <ShowerIcon />
-            <IntroductionTitle>Quanto custa meu banho?</IntroductionTitle>
+            <HeadingTitle>Quanto custa meu banho?</HeadingTitle>
             <IntroductionSubTitle>Calcule quanto você está gastando para tomar banho</IntroductionSubTitle>
             <ShowerTube/>
         </>
