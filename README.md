@@ -7,3 +7,6 @@ I was always worried about how my electric bill get so expencieve, my main thoug
 
 ## What the app tryies to solve
 The object is to show the user how much he spend on a shower, and how much it is on an entire month, showing him how much he could save if took short showers.
+
+## Gallery
+![image](https://user-images.githubusercontent.com/19805404/193950468-0bb494b4-6c0e-4dca-9db5-6996eeac694e.png)
