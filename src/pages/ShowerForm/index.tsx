@@ -8,8 +8,8 @@ import BackgroundCircle from "../../components/atoms/BackgroundCircle";
 import ShowerFormArea from "../../components/organisms/ShowerFormArea";
 
 export default function ShowerFormPage({navigation}: NativeStackScreenProps<any>) {
-  const goToShowerForm = () => {
-    navigation.navigate('ShowerForm')
+  const goToNext = () => {
+    navigation.navigate('Recording')
   };
 
   return (
@@ -22,7 +22,7 @@ export default function ShowerFormPage({navigation}: NativeStackScreenProps<any>
 
       <BackgroundCircle/>
 
-      <ContinueButton onPress={goToShowerForm}/>
+      <ContinueButton onPress={goToNext}/>
     </Container>
   );
 }
