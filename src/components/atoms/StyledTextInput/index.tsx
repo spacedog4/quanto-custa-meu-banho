@@ -1,16 +1,18 @@
 import React from "react";
 import {Container} from "./style";
+import {TextInputProps} from "react-native";
 
 type Props = {
   placeholder: string;
+  value: string,
+  setValue: (value: string) => void
 };
 
-export default function StyledTextInput({placeholder}: Props) {
+export default function StyledTextInput({...rest}: TextInputProps) {
   return (
     <Container
-      placeholder={placeholder}
+      {...rest}
       placeholderTextColor="#ffffff99"
-      keyboardType="numeric"
     >
     </Container>
   );

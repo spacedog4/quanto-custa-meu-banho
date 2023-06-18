@@ -1,23 +1,23 @@
 import React from "react";
 import {Container} from "./style";
 import HeadingTitle from "../../components/atoms/HeadingTitle";
-import EnergyFormArea from "../../components/organisms/EnergyFormArea";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import ContinueButton from "../../components/molecules/ContinueButton";
 import {View} from "react-native";
 import BackgroundCircle from "../../components/atoms/BackgroundCircle";
+import ShowerFormArea from "../../components/organisms/ShowerFormArea";
 
-export default function EnergyFormPage({navigation}: NativeStackScreenProps<any>) {
+export default function ShowerFormPage({navigation}: NativeStackScreenProps<any>) {
   const goToShowerForm = () => {
     navigation.navigate('ShowerForm')
   };
 
   return (
     <Container>
-      <HeadingTitle>Quanto você paga de energia?</HeadingTitle>
+      <HeadingTitle>Nos dia mais sobre seu chuveiro</HeadingTitle>
 
       <View style={{marginBottom: 200}}>
-        <EnergyFormArea/>
+        <ShowerFormArea/>
       </View>
 
       <BackgroundCircle/>
