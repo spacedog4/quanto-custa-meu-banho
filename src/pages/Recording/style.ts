@@ -9,3 +9,15 @@ export const Container = styled(View)`
   padding: ${Constants.statusBarHeight + 40}px 40px 40px;
   position: relative;
 `
+
+export const RecordArea = styled(View)`
+  align-items: center;
+  margin-top: 180px;
+`
+
+export const RecordAreaBackground = styled(View)`
+  background-color: #20303F;
+  position: absolute;
+  opacity: .1;
+  z-index: -1;
+`
