@@ -17,4 +17,4 @@ The object is to show the user how much he spend on a shower, and how much it is
 </div>
 
 ## Videos
-<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/19805404/257065240-4b69356d-b0d4-4128-be6a-ee70d373a76b.gif" width="200px">
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/19805404/257065766-308de1d1-1f0a-4c69-846d-140b297889ca.gif" width="200px">
