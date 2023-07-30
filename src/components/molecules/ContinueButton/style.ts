@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { TouchableHighlight, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
-export const Container = styled(TouchableHighlight)`
+export const Container = styled(TouchableOpacity)`
   background-color: #E8B914;
   padding: 20px 30px;
   position: absolute;

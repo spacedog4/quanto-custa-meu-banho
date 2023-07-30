@@ -1,13 +1,13 @@
 import React from 'react';
 import {Container} from "./style";
-import PlayIcon from "../../atoms/PlayIcon";
+import StopIcon from "../../atoms/StopIcon";
 
 type Props = { onPress: () => void }
 
-export default function RecordButton({ onPress }: Props) {
+export default function StopButton({ onPress }: Props) {
     return (
       <Container onPress={onPress}>
-        <PlayIcon />
+        <StopIcon />
       </Container>
     )
 }

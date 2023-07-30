@@ -13,6 +13,7 @@ export const Container = styled(View)`
 export const RecordArea = styled(View)`
   align-items: center;
   margin-top: 180px;
+  flex: 1;
 `
 
 export const RecordAreaBackground = styled(View)`
