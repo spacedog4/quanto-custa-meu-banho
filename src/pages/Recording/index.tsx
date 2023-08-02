@@ -1,15 +1,8 @@
 import React, {useState} from "react";
-import {Container, RecordArea, RecordAreaBackground} from "./style";
+import {Container, RecordArea, RecordAreaBackground, Fade} from "./style";
 import HeadingTitle from "../../components/atoms/HeadingTitle";
 import NavigationButtons from "../../components/organisms/NavigationButtons";
-import {Dimensions, View, Text} from "react-native";
-import RecordButton from "../../components/molecules/RecordButton";
-import HistoricList from "../../components/organisms/HistoricList";
-import RecordingValue from "../../components/organisms/RecordingValue";
-import PauseButton from "../../components/molecules/PauseButton";
-import RecordingTimeText from "../../components/atoms/RecordingTimeText";
-import StopButton from "../../components/molecules/StopButton";
-import RecordButtonGroup from "../../components/molecules/RecordButtonGroup";
+import {Dimensions, View} from "react-native";
 import RecordingAreaContent from "../../components/organisms/RecordingAreaContent";
 
 export default function RecordingPage() {
@@ -56,6 +49,7 @@ export default function RecordingPage() {
           top: -100
         }}/>
       </RecordArea>
+      { state === null && <Fade colors={['rgba(207,134,207,0)', 'rgba(55,134,207,1)']}/>}
     </Container>
   );
 }

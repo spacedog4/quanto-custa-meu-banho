@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { View } from 'react-native';
 import Constants from 'expo-constants';
+import {LinearGradient} from "expo-linear-gradient";
 
 export const Container = styled(View)`
   flex: 1;
@@ -21,4 +22,12 @@ export const RecordAreaBackground = styled(View)`
   position: absolute;
   opacity: .1;
   z-index: -1;
+`
+
+export const Fade = styled(LinearGradient)`
+  position: absolute;
+  height: 100px;
+  bottom: 0;
+  left: 0;
+  right: 0;
 `
