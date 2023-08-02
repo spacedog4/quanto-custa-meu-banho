@@ -10,10 +10,10 @@ The object is to show the user how much he spend on a shower, and how much it is
 
 ## Gallery
 <div style="display: flex">
-<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/19805404/257065618-7ac867c5-dc5e-4fd5-9502-764ca7b865db.jpeg" width="200px">
-<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/19805404/257065130-c5147acd-e518-4f40-9ae1-ef28e3edb0f9.jpeg" width="200px">
-<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/19805404/257065135-2d5e7598-b3b9-4242-89e9-c9ac18775cfc.jpeg" width="200px">
-<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/19805404/257065141-4159018e-ae58-421f-9355-550881f99678.jpeg" width="200px">
+<img title="introduction" src="https://github-production-user-asset-6210df.s3.amazonaws.com/19805404/257065618-7ac867c5-dc5e-4fd5-9502-764ca7b865db.jpeg" width="200px">
+<img title="recording page" src="https://github-production-user-asset-6210df.s3.amazonaws.com/19805404/257809658-b9594b4f-7292-441d-a22b-9d36bd79d69e.jpeg" width="200px">
+<img title="recording" src="https://github-production-user-asset-6210df.s3.amazonaws.com/19805404/257065135-2d5e7598-b3b9-4242-89e9-c9ac18775cfc.jpeg" width="200px">
+<img title="paused" src="https://github-production-user-asset-6210df.s3.amazonaws.com/19805404/257065141-4159018e-ae58-421f-9355-550881f99678.jpeg" width="200px">
 </div>
 
 ## Videos
