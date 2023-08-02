@@ -9,4 +9,12 @@ I was always worried about how my electric bill get so expencieve, my main thoug
 The object is to show the user how much he spend on a shower, and how much it is on an entire month, showing him how much he could save if took short showers.
 
 ## Gallery
-![image](https://user-images.githubusercontent.com/19805404/193950468-0bb494b4-6c0e-4dca-9db5-6996eeac694e.png)
+<div style="display: flex">
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/19805404/257065618-7ac867c5-dc5e-4fd5-9502-764ca7b865db.jpeg" width="200px">
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/19805404/257065130-c5147acd-e518-4f40-9ae1-ef28e3edb0f9.jpeg" width="200px">
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/19805404/257065135-2d5e7598-b3b9-4242-89e9-c9ac18775cfc.jpeg" width="200px">
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/19805404/257065141-4159018e-ae58-421f-9355-550881f99678.jpeg" width="200px">
+</div>
+
+## Videos
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/19805404/257065766-308de1d1-1f0a-4c69-846d-140b297889ca.gif" width="200px">
