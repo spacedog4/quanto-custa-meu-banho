@@ -46,7 +46,9 @@ export default function RecordingAreaContent(
   ) : (
     <>
       <RecordButton onPress={start}/>
-      <HistoricList/>
+      <View style={{height: 350}}>
+        <HistoricList/>
+      </View>
     </>
   )
 }

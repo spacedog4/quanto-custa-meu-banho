@@ -7,16 +7,23 @@ const historyIcon = require('../../../assets/history-icon.png');
 const energyConfigIcon = require('../../../assets/energy-config-icon.png');
 const showerConfigIcon = require('../../../assets/shower-config-icon.png');
 
-export default function NavigationButtons() {
+type Props = {
+  goToHistoricPage: () => void
+}
+
+export default function NavigationButtons({goToHistoricPage}: Props) {
+
   return (
     <Container>
-      <NavigationButton>
+      <NavigationButton onPress={goToHistoricPage}>
         <Image source={historyIcon}/>
       </NavigationButton>
-      <NavigationButton>
+      <NavigationButton onPress={() => {
+      }}>
         <Image source={energyConfigIcon}/>
       </NavigationButton>
-      <NavigationButton>
+      <NavigationButton onPress={() => {
+      }}>
         <Image source={showerConfigIcon}/>
       </NavigationButton>
     </Container>

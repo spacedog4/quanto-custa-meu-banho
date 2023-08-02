@@ -2,12 +2,13 @@ import React from 'react';
 import {Container} from "./style";
 
 type Props = {
-  children: React.ReactNode
+  children: React.ReactNode,
+  onPress: () => void
 }
 
-export default function NavigationButton({children}: Props) {
+export default function NavigationButton({children, onPress}: Props) {
   return (
-    <Container>
+    <Container onPress={onPress}>
       {children}
     </Container>
   )

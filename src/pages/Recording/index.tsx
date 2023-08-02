@@ -4,8 +4,9 @@ import HeadingTitle from "../../components/atoms/HeadingTitle";
 import NavigationButtons from "../../components/organisms/NavigationButtons";
 import {Dimensions, View} from "react-native";
 import RecordingAreaContent from "../../components/organisms/RecordingAreaContent";
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
 
-export default function RecordingPage() {
+export default function RecordingPage({ navigation }: NativeStackScreenProps<any>) {
   const aspectRadio = Dimensions.get('window').width * 2
   const [state, setState] = useState<'recording' | 'paused' | null>(null)
   const [totalValue, setTotalValue] = useState(0)
@@ -24,12 +25,16 @@ export default function RecordingPage() {
     setTotalValue(value)
   }
 
+  const goToHistoricPage = () => {
+    navigation.navigate('Historic')
+  }
+
   return (
     <Container>
       <HeadingTitle>Bem vindo</HeadingTitle>
 
       <View style={{marginTop: 50}}>
-        <NavigationButtons/>
+        <NavigationButtons goToHistoricPage={goToHistoricPage}/>
       </View>
       <RecordArea style={{justifyContent: isRecording() ? 'space-between' : 'center'}}>
         <RecordingAreaContent

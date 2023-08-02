@@ -5,6 +5,7 @@ import IntroductionPage from '../pages/Introduction';
 import EnergyFormPage from '../pages/EnergyForm';
 import ShowerFormPage from "../pages/ShowerForm";
 import RecordingPage from "../pages/Recording";
+import HistoricPage from "../pages/Historic";
 
 const Stack = createNativeStackNavigator()
 
@@ -16,6 +17,7 @@ export default function Route() {
                 <Stack.Screen name="EnergyForm" component={EnergyFormPage}/>
                 <Stack.Screen name="ShowerForm" component={ShowerFormPage}/>
                 <Stack.Screen name="Recording" component={RecordingPage}/>
+                <Stack.Screen name="Historic" component={HistoricPage}/>
             </Stack.Navigator>
         </NavigationContainer>
     )
