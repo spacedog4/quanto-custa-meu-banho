@@ -14,10 +14,10 @@ type Props = {
 export default function RecordingButtons({state, stop, release, pause}: Props) {
   return state === 'paused' ? (
     <RecordButtonGroup>
-      <StopButton onPress={stop}/>
+      <StopButton onLongPress={stop}/>
       <RecordButton onPress={release}/>
     </RecordButtonGroup>
   ) : (
-    <PauseButton onPress={pause}/>
+    <PauseButton onLongPress={pause}/>
   )
 }

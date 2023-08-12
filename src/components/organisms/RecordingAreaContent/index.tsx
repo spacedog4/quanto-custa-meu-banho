@@ -1,6 +1,6 @@
 import React from 'react';
 import RecordingValue from "../RecordingValue";
-import {View} from "react-native";
+import {TouchableWithoutFeedback, View} from "react-native";
 import RecordingTimeText from "../../atoms/RecordingTimeText";
 import RecordButton from "../../molecules/RecordButton";
 import HistoricList from "../HistoricList";
@@ -14,7 +14,8 @@ type Props = {
   stop: () => void,
   release: () => void,
   pause: () => void,
-  handleTimerUpdates: (time: number) => void
+  handleTimerUpdates: (time: number) => void,
+  onHistoryPress: () => void
 }
 export default function RecordingAreaContent(
   {
@@ -25,7 +26,8 @@ export default function RecordingAreaContent(
     stop,
     release,
     pause,
-    handleTimerUpdates
+    handleTimerUpdates,
+    onHistoryPress
   }: Props) {
   return isRecording ? (
     <>
@@ -46,9 +48,11 @@ export default function RecordingAreaContent(
   ) : (
     <>
       <RecordButton onPress={start}/>
-      <View style={{height: 350}}>
-        <HistoricList/>
-      </View>
+      <TouchableWithoutFeedback onPress={onHistoryPress}>
+        <View style={{height: 250, marginTop: 80}}>
+          <HistoricList size="small"/>
+        </View>
+      </TouchableWithoutFeedback>
     </>
   )
 }

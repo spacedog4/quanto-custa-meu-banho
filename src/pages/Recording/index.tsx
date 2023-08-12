@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Container, RecordArea, RecordAreaBackground, Fade} from "./style";
+import {Container, RecordArea, RecordAreaBackground} from "./style";
 import HeadingTitle from "../../components/atoms/HeadingTitle";
 import NavigationButtons from "../../components/organisms/NavigationButtons";
 import {Dimensions, View} from "react-native";
@@ -46,6 +46,7 @@ export default function RecordingPage({ navigation }: NativeStackScreenProps<any
           release={() => setState('recording')}
           pause={() => setState('paused')}
           handleTimerUpdates={handleTimerUpdates}
+          onHistoryPress={goToHistoricPage}
         />
         <RecordAreaBackground style={{
           width: aspectRadio,
@@ -54,7 +55,6 @@ export default function RecordingPage({ navigation }: NativeStackScreenProps<any
           top: -100
         }}/>
       </RecordArea>
-      { state === null && <Fade colors={['rgba(207,134,207,0)', 'rgba(55,134,207,1)']}/>}
     </Container>
   );
 }

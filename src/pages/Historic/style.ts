@@ -5,8 +5,9 @@ import Constants from 'expo-constants';
 export const Container = styled(View)`
   flex: 1;
   background-color: #3786CF;
-  padding: ${Constants.statusBarHeight + 40}px 40px 40px;
+  padding: ${Constants.statusBarHeight + 40}px 40px 0 40px;
   position: relative;
+  justify-content: flex-end;
 `
 
 export const Background = styled(View)`

@@ -2,11 +2,11 @@ import React from 'react';
 import {Container} from "./style";
 import PauseIcon from "../../atoms/PauseIcon";
 
-type Props = { onPress: () => void }
+type Props = { onLongPress?: () => void }
 
-export default function PauseButton({ onPress }: Props) {
+export default function PauseButton({ onLongPress }: Props) {
     return (
-      <Container onPress={onPress}>
+      <Container onLongPress={onLongPress}>
         <PauseIcon />
       </Container>
     )

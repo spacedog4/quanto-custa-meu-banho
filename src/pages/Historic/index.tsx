@@ -13,14 +13,18 @@ export default function HistoricPage({navigation}: NativeStackScreenProps<any>) 
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
 
+  const goBack = () => {
+    navigation.goBack()
+  }
+
   return (
     <Container>
       <StatusBar style="light"/>
-      <HistoricList/>
+      <HistoricList size="normal" goBack={goBack}/>
       <Background style={{
         width: windowWidth * 2,
         height: windowHeight,
-        left: - (windowWidth / 2),
+        left: -(windowWidth / 2),
         borderTopLeftRadius: windowWidth,
         borderTopRightRadius: windowWidth,
       }}/>

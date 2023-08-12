@@ -23,11 +23,3 @@ export const RecordAreaBackground = styled(View)`
   opacity: .1;
   z-index: -1;
 `
-
-export const Fade = styled(LinearGradient)`
-  position: absolute;
-  height: 100px;
-  bottom: 0;
-  left: 0;
-  right: 0;
-`
