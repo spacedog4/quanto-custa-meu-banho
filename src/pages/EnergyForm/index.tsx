@@ -7,36 +7,29 @@ import ContinueButton from "../../components/molecules/ContinueButton";
 import {View} from "react-native";
 import BackgroundCircle from "../../components/atoms/BackgroundCircle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {OptionType} from "../../components/molecules/SelectInput";
+import {EnergyType} from "../../types/EnergyTypes";
 
 export default function EnergyFormPage({navigation}: NativeStackScreenProps<any>) {
-  const [uf, setUf] = useState<OptionType | null>(null);
-  const [energyValue, setEnergyValue] = useState<number | null>(null);
-  const [energyDistributor, setEnergyDistributor] = useState<OptionType | null>(null);
-
-  const logErr = (err: string) => {
-    console.error(err)
-  }
+  const [energy, setEnergy] = useState<EnergyType>();
 
   useEffect(() => {
-    AsyncStorage.getItem('uf').then(
-      v => setUf(v ? JSON.parse(v) : null)
-    ).catch(logErr);
-
-    AsyncStorage.getItem('energyValue').then(
-      v => setEnergyValue(v ? Number(v) : null)
-    ).catch(logErr);
-
-    AsyncStorage.getItem('energyDistributor').then(
-      v => setEnergyDistributor(v ? JSON.parse(v) : null)
-    ).catch(logErr);
-  }, []);
+    AsyncStorage.getItem('energy').then(value => {
+      if (value) {
+        setEnergy(JSON.parse(value))
+      } else {
+        setEnergy({
+          uf: null,
+          energyValue: null,
+          energyDistributor: null
+        })
+      }
+    })
+  }, [navigation])
 
   const goToShowerForm = async () => {
-    const model = await AsyncStorage.getItem('model')
-    const power = await AsyncStorage.getItem('power')
+    const shower = await AsyncStorage.getItem('shower')
 
-    if (!model || !power) {
+    if (!shower) {
       navigation.navigate('ShowerForm')
       return
     }
@@ -45,12 +38,17 @@ export default function EnergyFormPage({navigation}: NativeStackScreenProps<any>
 
   };
 
+  const handleUpdateEnergy = async (energy: EnergyType) => {
+    setEnergy(energy);
+    await AsyncStorage.setItem('energy', JSON.stringify(energy));
+  }
+
   return (
     <Container>
       <HeadingTitle>Quanto você paga de energia?</HeadingTitle>
 
       <View style={{marginBottom: 200}}>
-        <EnergyFormArea startingValue={{uf, energyDistributor, energyValue}}/>
+        {energy && <EnergyFormArea energy={energy} updateEnergy={handleUpdateEnergy}/>}
       </View>
 
       <BackgroundCircle/>

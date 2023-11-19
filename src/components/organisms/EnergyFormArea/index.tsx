@@ -4,6 +4,7 @@ import SelectInput, {OptionType} from "../../molecules/SelectInput";
 import axios from 'axios';
 import StyledCurrencyInput from "../../atoms/StyledCurrencyInput";
 import AsyncStorage from "@react-native-community/async-storage";
+import {EnergyType} from "../../../types/EnergyTypes";
 
 export type ibgeUfOption = {
   id: number;
@@ -17,32 +18,30 @@ export type ibgeUfOption = {
 }
 
 type Props = {
-  startingValue: {
-    uf: OptionType | null,
-    energyValue: number | null,
-    energyDistributor: OptionType | null
-  }
+  energy: EnergyType,
+  updateEnergy: (energy: EnergyType) => void
 }
 
-export default function EnergyFormArea({ startingValue }: Props) {
+export default function EnergyFormArea({energy, updateEnergy}: Props) {
   const [ufs, setUFs] = useState([]);
   const [energyDistributors] = useState<OptionType[]>([
     {id: 1, title: 'Copel'}, {id: 2, title: 'Teste'}
   ]);
-  const [energyValue, setEnergyValue] = useState<number|null>(null);
 
-  const handleChangeEnergyValue = async (value: number|null) => {
-    setEnergyValue(value);
-    await AsyncStorage.setItem('energyValue', value ? value.toString() : '');
+  const handleChangeEnergyValue = async (value: number | null) => {
+    energy.energyValue = value
+    updateEnergy({...energy})
   }
 
   const handleSelectUF = async (item: OptionType) => {
-    await AsyncStorage.setItem('uf', JSON.stringify(item));
-  };
+    energy.uf = item
+    updateEnergy({...energy})
+  }
 
   const handleSelectEnergyDistributor = async (item: OptionType) => {
-    await AsyncStorage.setItem('energyDistributor', JSON.stringify(item));
-  };
+    energy.uf = item
+    updateEnergy({...energy})
+  }
 
   useEffect(() => {
     axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(({data}) => {
@@ -69,7 +68,7 @@ export default function EnergyFormArea({ startingValue }: Props) {
           options={ufs}
           onChange={(v) => void handleSelectUF(v)}
           title="Estado"
-          initialOption={startingValue.uf}
+          initialOption={energy.uf}
         ></SelectInput>
       </View>
 
@@ -79,12 +78,12 @@ export default function EnergyFormArea({ startingValue }: Props) {
           options={energyDistributors}
           onChange={(v) => void handleSelectEnergyDistributor(v)}
           title="Distribuidora"
-          initialOption={startingValue.energyDistributor}
+          initialOption={energy.energyDistributor}
         ></SelectInput>
       </View>
 
       <StyledCurrencyInput
-        value={energyValue ?? startingValue.energyValue}
+        value={energy.energyValue}
         onChangeValue={(v) => void handleChangeEnergyValue(v)}
         placeholder="Valor Km/h"
       />

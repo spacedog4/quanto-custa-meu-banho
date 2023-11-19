@@ -16,21 +16,16 @@ export default function Route() {
 
   const startRoute = async () => {
     const skipInitial = await AsyncStorage.getItem('skipInitial')
+    const energy = await AsyncStorage.getItem('energy')
+    const shower = await AsyncStorage.getItem('shower')
 
-    const uf = await AsyncStorage.getItem('uf')
-    const energyValue = await AsyncStorage.getItem('energyValue')
-    const energyDistributor = await AsyncStorage.getItem('energyDistributor')
-
-    const model = await AsyncStorage.getItem('model')
-    const power = await AsyncStorage.getItem('power')
-
-    console.log({skipInitial, uf, energyValue, energyDistributor, model, power});
+    console.log({skipInitial, energy, shower});
 
     if (skipInitial !== 'true') {
       setInitialRouteName("Introduction");
-    } else if (!uf || !energyValue || !energyDistributor) {
+    } else if (!energy) {
       setInitialRouteName("EnergyForm");
-    } else if (!model || !power) {
+    } else if (!shower) {
       setInitialRouteName("ShowerForm");
     } else {
       setInitialRouteName("Recording");

@@ -4,7 +4,7 @@ import {TextInputProps} from "react-native";
 
 type Props = {
   placeholder: string;
-  value: string,
+  value: string | null,
   setValue: (value: string) => void
 };
 

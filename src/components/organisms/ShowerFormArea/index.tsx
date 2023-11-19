@@ -1,46 +1,36 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {View} from "react-native";
 import StyledTextInput from "../../atoms/StyledTextInput";
-import AsyncStorage from "@react-native-community/async-storage";
+import {ShowerType} from "../../../types/ShowerTypes";
 
 type Props = {
-  startingValue: {
-    model: string | null
-    power: string | null
-  }
+  shower: ShowerType,
+  updateShower: (shower: ShowerType) => void
 }
 
-export default function ShowerFormArea({startingValue}: Props) {
-  const [modelValue, setModelValue] = useState('');
-  const [powerValue, setPowerValue] = useState('');
-
+export default function ShowerFormArea({shower, updateShower}: Props) {
   const handleChangeModel = async (value: string) => {
-    setModelValue(value);
-    await AsyncStorage.setItem('model', value);
+    shower.model = value
+    updateShower({...shower})
   }
 
   const handleChangePower = async (value: string) => {
-    setPowerValue(value);
-    await AsyncStorage.setItem('power', value);
+    shower.power = Number(value)
+    updateShower({...shower})
   }
-
-  useEffect(() => {
-    setModelValue(startingValue.model ?? '')
-    setPowerValue(startingValue.power ?? '')
-  }, [startingValue])
 
   return (
     <View>
       <View style={{marginBottom: 25}}>
         <StyledTextInput
-          value={modelValue ?? startingValue.model}
+          value={shower.model ?? undefined}
           onChangeText={(v) => void handleChangeModel(v)}
           placeholder="Modelo"
         />
       </View>
       <View style={{marginBottom: 25}}>
         <StyledTextInput
-          value={powerValue ?? startingValue.model}
+          value={shower.power ? shower.power.toString() : undefined}
           onChangeText={(v) => void handleChangePower(v)}
           placeholder="Potência em Kw"
           keyboardType="numeric"

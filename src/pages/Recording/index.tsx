@@ -6,6 +6,8 @@ import {Dimensions, View} from "react-native";
 import RecordingAreaContent from "../../components/organisms/RecordingAreaContent";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {EnergyType} from "../../types/EnergyTypes";
+import {ShowerType} from "../../types/ShowerTypes";
 
 export default function RecordingPage({navigation}: NativeStackScreenProps<any>) {
   const aspectRadio = Dimensions.get('window').width * 2
@@ -31,12 +33,22 @@ export default function RecordingPage({navigation}: NativeStackScreenProps<any>)
 
   useEffect(() => {
     navigation.addListener('focus', () => {
-      AsyncStorage.getItem('energyValue').then(
-        v => setEnergyValue(v ? Number(v) : 0)
+      AsyncStorage.getItem('energy').then(
+        v => {
+          if (v) {
+            const energy: EnergyType = JSON.parse(v);
+            setEnergyValue(energy.energyValue ?? 0)
+          }
+        }
       ).catch(err => console.error(err));
 
-      AsyncStorage.getItem('power').then(
-        v => setPowerValue(v ? Number(v) : 0)
+      AsyncStorage.getItem('shower').then(
+        v => {
+          if (v) {
+            const shower: ShowerType = JSON.parse(v);
+            setPowerValue(shower.power ?? 0)
+          }
+        }
       ).catch(err => console.error(err));
     });
   }, [navigation])
@@ -53,6 +65,19 @@ export default function RecordingPage({navigation}: NativeStackScreenProps<any>)
     navigation.navigate('ShowerForm')
   }
 
+  const handleStop = async () => {
+    setState(null);
+    let recordHistoric = []
+    let recordHistoricStorage = await AsyncStorage.getItem('record_historic');
+    if (recordHistoricStorage) {
+      recordHistoric = JSON.parse(recordHistoricStorage);
+    }
+
+    recordHistoric.push()
+
+    await AsyncStorage.setItem('record_historic', JSON.stringify(recordHistoric));
+  }
+
   return (
     <Container>
       <HeadingTitle>Bem vindo</HeadingTitle>
@@ -65,13 +90,13 @@ export default function RecordingPage({navigation}: NativeStackScreenProps<any>)
             goToShowerFormPage={goToShowerFormPage}
           />
         </View>
-        <RecordArea style={{justifyContent: isRecording() ? 'center': 'space-between', maxHeight: 450}}>
+        <RecordArea style={{justifyContent: isRecording() ? 'center' : 'space-between', maxHeight: 450}}>
           <RecordingAreaContent
             isRecording={isRecording()}
             totalValue={totalValue}
             state={state}
             start={() => setState('recording')}
-            stop={() => setState(null)}
+            stop={() => handleStop()}
             release={() => setState('recording')}
             pause={() => setState('paused')}
             handleTimerUpdates={handleTimerUpdates}
