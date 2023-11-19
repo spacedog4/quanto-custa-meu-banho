@@ -1,18 +1,17 @@
 import React from "react";
 import {Container} from "./style";
-import CurrencyInput from "react-native-currency-input";
 
 type Props = {
   placeholder: string;
   value: number|null,
-  setValue: (value: number | null) => void
+  onChangeValue: (value: number | null) => void
 };
 
-export default function StyledCurrencyInput({placeholder, value, setValue}: Props) {
+export default function StyledCurrencyInput({placeholder, value, onChangeValue}: Props) {
   return (
     <Container
       value={value}
-      onChangeValue={setValue}
+      onChangeValue={onChangeValue}
       prefix="R$ "
       delimiter="."
       separator=","

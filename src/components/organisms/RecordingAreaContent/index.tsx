@@ -15,7 +15,9 @@ type Props = {
   release: () => void,
   pause: () => void,
   handleTimerUpdates: (time: number) => void,
-  onHistoryPress: () => void
+  onHistoryPress: () => void,
+  energyValue: number,
+  powerValue: number
 }
 export default function RecordingAreaContent(
   {
@@ -27,11 +29,13 @@ export default function RecordingAreaContent(
     release,
     pause,
     handleTimerUpdates,
-    onHistoryPress
+    onHistoryPress,
+    energyValue,
+    powerValue
   }: Props) {
   return isRecording ? (
     <>
-      <RecordingValue value={totalValue}/>
+      <RecordingValue total={totalValue} energyValue={energyValue} powerValue={powerValue}/>
       <View>
         <RecordingButtons
           state={state}
@@ -49,7 +53,7 @@ export default function RecordingAreaContent(
     <>
       <RecordButton onPress={start}/>
       <TouchableWithoutFeedback onPress={onHistoryPress}>
-        <View style={{height: 250, marginTop: 80}}>
+        <View style={{height: 250, marginTop: 25}}>
           <HistoricList size="small"/>
         </View>
       </TouchableWithoutFeedback>

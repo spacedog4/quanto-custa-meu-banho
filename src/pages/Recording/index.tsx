@@ -1,23 +1,27 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Container, RecordArea, RecordAreaBackground} from "./style";
 import HeadingTitle from "../../components/atoms/HeadingTitle";
 import NavigationButtons from "../../components/organisms/NavigationButtons";
 import {Dimensions, View} from "react-native";
 import RecordingAreaContent from "../../components/organisms/RecordingAreaContent";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function RecordingPage({ navigation }: NativeStackScreenProps<any>) {
+export default function RecordingPage({navigation}: NativeStackScreenProps<any>) {
   const aspectRadio = Dimensions.get('window').width * 2
   const [state, setState] = useState<'recording' | 'paused' | null>(null)
   const [totalValue, setTotalValue] = useState(0)
+
+  const [energyValue, setEnergyValue] = useState(0)
+  const [powerValue, setPowerValue] = useState(0)
 
   const isRecording = (): boolean => {
     return state === 'recording' || state === 'paused'
   }
 
   const handleTimerUpdates = (time: number) => {
-    const valueKWHour = 0.785455
-    const kWh = 5
+    const valueKWHour = energyValue
+    const kWh = powerValue / 1000
     const hours = time / 3600
 
     let value = (kWh * hours * valueKWHour);
@@ -25,36 +29,64 @@ export default function RecordingPage({ navigation }: NativeStackScreenProps<any
     setTotalValue(value)
   }
 
+  useEffect(() => {
+    navigation.addListener('focus', () => {
+      AsyncStorage.getItem('energyValue').then(
+        v => setEnergyValue(v ? Number(v) : 0)
+      ).catch(err => console.error(err));
+
+      AsyncStorage.getItem('power').then(
+        v => setPowerValue(v ? Number(v) : 0)
+      ).catch(err => console.error(err));
+    });
+  }, [navigation])
+
   const goToHistoricPage = () => {
     navigation.navigate('Historic')
+  }
+
+  const goToEnergyFormPage = () => {
+    navigation.navigate('EnergyForm')
+  }
+
+  const goToShowerFormPage = () => {
+    navigation.navigate('ShowerForm')
   }
 
   return (
     <Container>
       <HeadingTitle>Bem vindo</HeadingTitle>
 
-      <View style={{marginTop: 50}}>
-        <NavigationButtons goToHistoricPage={goToHistoricPage}/>
+      <View style={{flex: 1, justifyContent: 'space-between'}}>
+        <View style={{marginTop: 50}}>
+          <NavigationButtons
+            goToHistoricPage={goToHistoricPage}
+            goToEnergyFormPage={goToEnergyFormPage}
+            goToShowerFormPage={goToShowerFormPage}
+          />
+        </View>
+        <RecordArea style={{justifyContent: isRecording() ? 'center': 'space-between', maxHeight: 450}}>
+          <RecordingAreaContent
+            isRecording={isRecording()}
+            totalValue={totalValue}
+            state={state}
+            start={() => setState('recording')}
+            stop={() => setState(null)}
+            release={() => setState('recording')}
+            pause={() => setState('paused')}
+            handleTimerUpdates={handleTimerUpdates}
+            onHistoryPress={goToHistoricPage}
+            energyValue={energyValue}
+            powerValue={powerValue}
+          />
+          <RecordAreaBackground style={{
+            width: aspectRadio,
+            height: aspectRadio,
+            borderRadius: aspectRadio,
+            top: -50
+          }}/>
+        </RecordArea>
       </View>
-      <RecordArea style={{justifyContent: isRecording() ? 'space-between' : 'center'}}>
-        <RecordingAreaContent
-          isRecording={isRecording()}
-          totalValue={totalValue}
-          state={state}
-          start={() => setState('recording')}
-          stop={() => setState(null)}
-          release={() => setState('recording')}
-          pause={() => setState('paused')}
-          handleTimerUpdates={handleTimerUpdates}
-          onHistoryPress={goToHistoricPage}
-        />
-        <RecordAreaBackground style={{
-          width: aspectRadio,
-          height: aspectRadio,
-          borderRadius: aspectRadio,
-          top: -100
-        }}/>
-      </RecordArea>
     </Container>
   );
 }

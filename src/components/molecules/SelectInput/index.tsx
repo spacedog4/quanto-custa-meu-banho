@@ -23,6 +23,7 @@ type Props = {
   onChange: (item: OptionType) => void;
   title: string;
   options: OptionType[];
+  initialOption?: OptionType | null
 };
 
 export type OptionType = {
@@ -30,12 +31,12 @@ export type OptionType = {
   title: string;
 };
 
-export default function SelectInput({placeholder, onChange, title, options}: Props) {
+export default function SelectInput({placeholder, onChange, title, options, initialOption}: Props) {
   const [visible, setVisible] = useState(false);
   const [q, setQ] = useState('');
   const [filteredOptions, setFilteredOptions] = useState<OptionType[]>([]);
   const [selectedOption, setSelectedOption] = useState<
-    OptionType | undefined
+    OptionType | null
   >();
 
   const onPress = () => setVisible(true);
@@ -51,6 +52,12 @@ export default function SelectInput({placeholder, onChange, title, options}: Pro
   useEffect(() => {
     setFilteredOptions(options)
   }, [options])
+
+  useEffect(() => {
+    if (initialOption) {
+      setSelectedOption(initialOption)
+    }
+  }, [initialOption])
 
   useEffect(() => {
     setFilteredOptions(options.filter(item => {
