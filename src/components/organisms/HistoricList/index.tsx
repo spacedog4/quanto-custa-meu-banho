@@ -1,35 +1,28 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Container} from "./style";
 import HistoricItem from "../../molecules/HistoricItem";
-import {Dimensions, FlatList, TouchableWithoutFeedback, View} from "react-native";
+import {Dimensions, FlatList, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
 import DownIcon from "../../atoms/DownIcon";
+import {HistoricItemType} from "@type/HistoricTypes";
+import ModalHistoricDetails from "../../molecules/ModalHistoricDetails";
+
 
 type Props = {
   size: string,
+  historic: HistoricItemType[]
   goBack?: () => void
 }
 
-type HistoricItemType = {
-  value: number
-  date: string
-}
+export default function HistoricList({size, historic, goBack}: Props) {
+  const [visibleModal, setVisibleModal] = useState(false)
+  const {height, width} = Dimensions.get('window')
+  const [selectedHistoricItem, setSelectedHistoricItem] = useState<HistoricItemType>()
 
-export default function HistoricList({size, goBack}: Props) {
-  const {height, width} = Dimensions.get('window');
-  const data: HistoricItemType[] = [
-    {value: 16.30, date: '2022-08-31'},
-    {value: 36.90, date: '2022-09-01'},
-    {value: 16.30, date: '2022-08-31'},
-    {value: 36.90, date: '2022-09-01'},
-    {value: 16.30, date: '2022-08-31'},
-    {value: 36.90, date: '2022-09-01'},
-    {value: 16.30, date: '2022-08-31'},
-    {value: 36.90, date: '2022-09-01'},
-    {value: 16.30, date: '2022-08-31'},
-    {value: 36.90, date: '2022-09-01'},
-    {value: 16.30, date: '2022-08-31'},
-    {value: 36.90, date: '2022-09-01'},
-  ]
+  const openModalHistoricItem = (historicItem: HistoricItemType) => {
+    setVisibleModal(true)
+    console.log(historicItem)
+    setSelectedHistoricItem(historicItem)
+  }
 
   return (
     <Container>
@@ -42,21 +35,25 @@ export default function HistoricList({size, goBack}: Props) {
         </TouchableWithoutFeedback>
       }
       <FlatList<HistoricItemType>
-        data={data}
+        data={historic}
         scrollEnabled={size !== 'small'}
         fadingEdgeLength={300}
         showsVerticalScrollIndicator={false}
         renderItem={({item}) => (
-          <HistoricItem
-            value={item.value}
-            date={'2022-08-31'}
-          />
+          size === 'small' ?
+            <HistoricItem
+              value={item.value}
+              date={item.date}
+            /> : <TouchableOpacity onPress={() => openModalHistoricItem(item)}>
+              <HistoricItem value={item.value} date={item.date}/>
+            </TouchableOpacity>
         )}
         style={
           {height: height * 0.8, flexGrow: 0}
         }
       >
       </FlatList>
+      <ModalHistoricDetails visible={visibleModal} setVisible={setVisibleModal} historicDetails={selectedHistoricItem} />
     </Container>
   )
 }

@@ -6,24 +6,26 @@ import {Dimensions, View} from "react-native";
 import RecordingAreaContent from "../../components/organisms/RecordingAreaContent";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {EnergyType} from "../../types/EnergyTypes";
-import {ShowerType} from "../../types/ShowerTypes";
+import {EnergyType} from "@type/EnergyTypes";
+import {ShowerType} from "@type/ShowerTypes";
+import {HistoricItemType} from "@type/HistoricTypes";
 
 export default function RecordingPage({navigation}: NativeStackScreenProps<any>) {
   const aspectRadio = Dimensions.get('window').width * 2
   const [state, setState] = useState<'recording' | 'paused' | null>(null)
   const [totalValue, setTotalValue] = useState(0)
 
-  const [energyValue, setEnergyValue] = useState(0)
-  const [powerValue, setPowerValue] = useState(0)
+  const [energy, setEnergy] = useState<EnergyType>()
+  const [shower, setShower] = useState<ShowerType>()
+  const [historic, setHistoric] = useState<HistoricItemType[]>([])
 
   const isRecording = (): boolean => {
     return state === 'recording' || state === 'paused'
   }
 
   const handleTimerUpdates = (time: number) => {
-    const valueKWHour = energyValue
-    const kWh = powerValue / 1000
+    const valueKWHour = energy?.energyValue ?? 0
+    const kWh = (shower?.power ?? 0) / 1000
     const hours = time / 3600
 
     let value = (kWh * hours * valueKWHour);
@@ -36,8 +38,9 @@ export default function RecordingPage({navigation}: NativeStackScreenProps<any>)
       AsyncStorage.getItem('energy').then(
         v => {
           if (v) {
-            const energy: EnergyType = JSON.parse(v);
-            setEnergyValue(energy.energyValue ?? 0)
+            setEnergy(JSON.parse(v))
+          } else {
+            goToEnergyFormPage()
           }
         }
       ).catch(err => console.error(err));
@@ -45,8 +48,17 @@ export default function RecordingPage({navigation}: NativeStackScreenProps<any>)
       AsyncStorage.getItem('shower').then(
         v => {
           if (v) {
-            const shower: ShowerType = JSON.parse(v);
-            setPowerValue(shower.power ?? 0)
+            setShower(JSON.parse(v))
+          } else {
+            goToShowerFormPage()
+          }
+        }
+      ).catch(err => console.error(err));
+
+      AsyncStorage.getItem('historic').then(
+        v => {
+          if (v) {
+            setHistoric(JSON.parse(v))
           }
         }
       ).catch(err => console.error(err));
@@ -67,15 +79,20 @@ export default function RecordingPage({navigation}: NativeStackScreenProps<any>)
 
   const handleStop = async () => {
     setState(null);
-    let recordHistoric = []
-    let recordHistoricStorage = await AsyncStorage.getItem('record_historic');
-    if (recordHistoricStorage) {
-      recordHistoric = JSON.parse(recordHistoricStorage);
+
+    if (!shower || !energy) {
+      console.log('No shower or energy setted');
+      return;
     }
 
-    recordHistoric.push()
+    historic.unshift({
+      value: totalValue,
+      date: new Date(),
+      shower: shower,
+      energy: energy
+    })
 
-    await AsyncStorage.setItem('record_historic', JSON.stringify(recordHistoric));
+    await AsyncStorage.setItem('historic', JSON.stringify(historic));
   }
 
   return (
@@ -90,27 +107,30 @@ export default function RecordingPage({navigation}: NativeStackScreenProps<any>)
             goToShowerFormPage={goToShowerFormPage}
           />
         </View>
-        <RecordArea style={{justifyContent: isRecording() ? 'center' : 'space-between', maxHeight: 450}}>
-          <RecordingAreaContent
-            isRecording={isRecording()}
-            totalValue={totalValue}
-            state={state}
-            start={() => setState('recording')}
-            stop={() => handleStop()}
-            release={() => setState('recording')}
-            pause={() => setState('paused')}
-            handleTimerUpdates={handleTimerUpdates}
-            onHistoryPress={goToHistoricPage}
-            energyValue={energyValue}
-            powerValue={powerValue}
-          />
-          <RecordAreaBackground style={{
-            width: aspectRadio,
-            height: aspectRadio,
-            borderRadius: aspectRadio,
-            top: -50
-          }}/>
-        </RecordArea>
+        {(shower && energy) && (
+          <RecordArea style={{justifyContent: isRecording() ? 'center' : 'space-between', maxHeight: 450}}>
+            <RecordingAreaContent
+              isRecording={isRecording()}
+              totalValue={totalValue}
+              state={state}
+              start={() => setState('recording')}
+              stop={() => handleStop()}
+              release={() => setState('recording')}
+              pause={() => setState('paused')}
+              handleTimerUpdates={handleTimerUpdates}
+              onHistoryPress={goToHistoricPage}
+              energyValue={energy.energyValue ?? 0}
+              powerValue={shower.power ?? 0}
+              historic={historic}
+            />
+            <RecordAreaBackground style={{
+              width: aspectRadio,
+              height: aspectRadio,
+              borderRadius: aspectRadio,
+              top: -50
+            }}/>
+          </RecordArea>
+        )}
       </View>
     </Container>
   );

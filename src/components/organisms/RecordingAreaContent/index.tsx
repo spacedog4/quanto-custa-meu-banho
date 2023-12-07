@@ -5,6 +5,7 @@ import RecordingTimeText from "../../atoms/RecordingTimeText";
 import RecordButton from "../../molecules/RecordButton";
 import HistoricList from "../HistoricList";
 import RecordingButtons from "../../molecules/RecordingButtons";
+import {HistoricItemType} from "@type/HistoricTypes";
 
 type Props = {
   isRecording: boolean,
@@ -17,7 +18,8 @@ type Props = {
   handleTimerUpdates: (time: number) => void,
   onHistoryPress: () => void,
   energyValue: number,
-  powerValue: number
+  powerValue: number,
+  historic: HistoricItemType[]
 }
 export default function RecordingAreaContent(
   {
@@ -31,7 +33,8 @@ export default function RecordingAreaContent(
     handleTimerUpdates,
     onHistoryPress,
     energyValue,
-    powerValue
+    powerValue,
+    historic
   }: Props) {
   return isRecording ? (
     <>
@@ -54,7 +57,7 @@ export default function RecordingAreaContent(
       <RecordButton onPress={start}/>
       <TouchableWithoutFeedback onPress={onHistoryPress}>
         <View style={{height: 250, marginTop: 25}}>
-          <HistoricList size="small"/>
+          <HistoricList size="small" historic={historic}/>
         </View>
       </TouchableWithoutFeedback>
     </>
