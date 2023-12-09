@@ -5,15 +5,17 @@ import {Dimensions, FlatList, TouchableOpacity, TouchableWithoutFeedback, View} 
 import DownIcon from "../../atoms/DownIcon";
 import {HistoricItemType} from "@type/HistoricTypes";
 import ModalHistoricDetails from "../../molecules/ModalHistoricDetails";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 type Props = {
   size: string,
-  historic: HistoricItemType[]
-  goBack?: () => void
+  historic: HistoricItemType[],
+  goBack?: () => void,
+  updateHistoric: () => void
 }
 
-export default function HistoricList({size, historic, goBack}: Props) {
+export default function HistoricList({size, historic, goBack, updateHistoric}: Props) {
   const [visibleModal, setVisibleModal] = useState(false)
   const {height, width} = Dimensions.get('window')
   const [selectedHistoricItem, setSelectedHistoricItem] = useState<HistoricItemType>()
@@ -22,6 +24,17 @@ export default function HistoricList({size, historic, goBack}: Props) {
     setVisibleModal(true)
     console.log(historicItem)
     setSelectedHistoricItem(historicItem)
+  }
+
+  const handleRemoveHistoric = async () => {
+    if (!selectedHistoricItem) return;
+    const newHistoric = historic.filter(item => {
+      return item.date !== selectedHistoricItem.date
+    })
+
+    await AsyncStorage.setItem('historic', JSON.stringify(newHistoric));
+
+    updateHistoric()
   }
 
   return (
@@ -53,7 +66,12 @@ export default function HistoricList({size, historic, goBack}: Props) {
         }
       >
       </FlatList>
-      <ModalHistoricDetails visible={visibleModal} setVisible={setVisibleModal} historicDetails={selectedHistoricItem} />
+      <ModalHistoricDetails
+        visible={visibleModal}
+        setVisible={setVisibleModal}
+        historicDetails={selectedHistoricItem}
+        removeHistoric={handleRemoveHistoric}
+      />
     </Container>
   )
 }

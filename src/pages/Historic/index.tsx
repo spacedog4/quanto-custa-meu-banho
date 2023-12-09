@@ -20,22 +20,26 @@ export default function HistoricPage({navigation}: NativeStackScreenProps<any>) 
     navigation.goBack()
   }
 
+  const updateHistoric = () => {
+    AsyncStorage.getItem('historic').then(
+      v => {
+        if (v) {
+          setHistoric(JSON.parse(v))
+        }
+      }
+    ).catch(err => console.error(err));
+  }
+
   useEffect(() => {
     navigation.addListener('focus', () => {
-      AsyncStorage.getItem('historic').then(
-        v => {
-          if (v) {
-            setHistoric(JSON.parse(v))
-          }
-        }
-      ).catch(err => console.error(err));
+      updateHistoric()
     });
   }, [navigation])
 
   return (
     <Container>
       <StatusBar style="light"/>
-      <HistoricList size="normal" historic={historic} goBack={goBack}/>
+      <HistoricList size="normal" historic={historic} goBack={goBack} updateHistoric={updateHistoric}/>
       <Background style={{
         width: windowWidth * 2,
         height: windowHeight,
