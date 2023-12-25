@@ -39,7 +39,7 @@ export default function EnergyFormArea({energy, updateEnergy}: Props) {
   }
 
   const handleSelectEnergyDistributor = async (item: OptionType) => {
-    energy.uf = item
+    energy.energyDistributor = item
     updateEnergy({...energy})
   }
 

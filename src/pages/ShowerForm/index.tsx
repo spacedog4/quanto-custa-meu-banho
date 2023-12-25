@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Container} from "./style";
+import {Container, HeadingSubtitle} from "./style";
 import HeadingTitle from "../../components/atoms/HeadingTitle";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import ContinueButton from "../../components/molecules/ContinueButton";
@@ -10,7 +10,10 @@ import AsyncStorage from "@react-native-community/async-storage";
 import {ShowerType} from "../../types/ShowerTypes";
 
 export default function ShowerFormPage({navigation}: NativeStackScreenProps<any>) {
-  const [shower, setShower] = useState<ShowerType>()
+  const [shower, setShower] = useState<ShowerType>({
+    model: 'Comum 220',
+    power: 7500
+  })
 
   useEffect(() => {
     AsyncStorage.getItem('shower').then(value => {
@@ -36,7 +39,10 @@ export default function ShowerFormPage({navigation}: NativeStackScreenProps<any>
 
   return (
     <Container>
-      <HeadingTitle>Nos diga mais sobre seu chuveiro</HeadingTitle>
+      <View>
+        <HeadingTitle>Nos diga mais sobre seu chuveiro</HeadingTitle>
+        <HeadingSubtitle>A potência média dos chuveiros 220v é de 7500wats, enquanto os de 127v é em torno de 5500wats</HeadingSubtitle>
+      </View>
 
       <View style={{marginBottom: 200}}>
         {shower && <ShowerFormArea shower={shower} updateShower={handleUpdateShower}/>}
