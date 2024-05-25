@@ -25,7 +25,7 @@ export default function ShowerFormArea({shower, updateShower}: Props) {
         <StyledTextInput
           value={shower.model ?? undefined}
           onChangeText={(v) => void handleChangeModel(v)}
-          placeholder="Modelo"
+          placeholder="Modelo (opcional)"
         />
       </View>
       <View style={{marginBottom: 25}}>
