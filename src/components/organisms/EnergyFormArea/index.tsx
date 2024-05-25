@@ -3,7 +3,6 @@ import {View} from "react-native";
 import SelectInput, {OptionType} from "../../molecules/SelectInput";
 import axios from 'axios';
 import StyledCurrencyInput from "../../atoms/StyledCurrencyInput";
-import AsyncStorage from "@react-native-community/async-storage";
 import {EnergyType} from "../../../types/EnergyTypes";
 
 export type ibgeUfOption = {
