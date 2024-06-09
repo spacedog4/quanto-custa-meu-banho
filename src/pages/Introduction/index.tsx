@@ -13,7 +13,6 @@ import AsyncStorage from "@react-native-community/async-storage";
 export default function IntroductionPage({ navigation }: NativeStackScreenProps<any>) {
     const goToEnergyForm = () => {
         AsyncStorage.setItem('skipInitial', 'true')
-          .then(v => console.log(v))
           .catch(err => console.error(err));
 
         navigation.navigate('EnergyForm')

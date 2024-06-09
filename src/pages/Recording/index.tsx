@@ -8,7 +8,8 @@ import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {EnergyType} from "@type/EnergyTypes";
 import {ShowerType} from "@type/ShowerTypes";
-import {HistoricItemType} from "@type/HistoricTypes";
+import {HistoricItemGroupedByMonthType} from "@type/HistoricTypes";
+import {getHistoric, mountHistoricKey, updateHistoric} from "../../services/history";
 
 export default function RecordingPage({navigation}: NativeStackScreenProps<any>) {
   const aspectRadio = Dimensions.get('window').width * 2
@@ -17,7 +18,7 @@ export default function RecordingPage({navigation}: NativeStackScreenProps<any>)
 
   const [energy, setEnergy] = useState<EnergyType>()
   const [shower, setShower] = useState<ShowerType>()
-  const [historic, setHistoric] = useState<HistoricItemType[]>([])
+  const [historic, setHistoric] = useState<HistoricItemGroupedByMonthType>()
 
   const isRecording = (): boolean => {
     return state === 'recording' || state === 'paused'
@@ -55,13 +56,8 @@ export default function RecordingPage({navigation}: NativeStackScreenProps<any>)
         }
       ).catch(err => console.error(err));
 
-      AsyncStorage.getItem('historic').then(
-        v => {
-          if (v) {
-            setHistoric(JSON.parse(v))
-          }
-        }
-      ).catch(err => console.error(err));
+      getHistoric().then(h => setHistoric(h));
+
     });
   }, [navigation])
 
@@ -81,18 +77,30 @@ export default function RecordingPage({navigation}: NativeStackScreenProps<any>)
     setState(null);
 
     if (!shower || !energy) {
-      console.log('No shower or energy setted');
+      console.error('No shower or energy setted');
       return;
     }
 
-    historic.unshift({
+    if (!historic) {
+      console.error('No historic loaded');
+      return;
+    }
+
+    const historicItem = {
       value: totalValue,
       date: new Date(),
       shower: shower,
       energy: energy
-    })
+    }
 
-    await AsyncStorage.setItem('historic', JSON.stringify(historic));
+    // Update historic state
+    const key = mountHistoricKey(new Date())
+    let historicClone = {...historic}
+    historicClone[key].unshift(historicItem)
+    setHistoric(historicClone);
+
+    // Update historic database
+    updateHistoric(historicClone)
   }
 
   return (
@@ -107,7 +115,7 @@ export default function RecordingPage({navigation}: NativeStackScreenProps<any>)
             goToShowerFormPage={goToShowerFormPage}
           />
         </View>
-        {(shower && energy) && (
+        {(shower && energy && historic) && (
           <RecordArea style={{justifyContent: isRecording() ? 'center' : 'space-between', maxHeight: 450}}>
             <RecordingAreaContent
               isRecording={isRecording()}

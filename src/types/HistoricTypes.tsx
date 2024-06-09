@@ -7,3 +7,7 @@ export type HistoricItemType = {
   shower: ShowerType,
   energy: EnergyType
 }
+
+export type HistoricItemGroupedByMonthType = {
+  [key: string]: HistoricItemType[];
+}

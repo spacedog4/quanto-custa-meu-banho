@@ -19,8 +19,6 @@ export default function Route() {
     const energy = await AsyncStorage.getItem('energy')
     const shower = await AsyncStorage.getItem('shower')
 
-    console.log({skipInitial, energy, shower});
-
     if (skipInitial !== 'true') {
       setInitialRouteName("Introduction");
     } else if (!energy) {

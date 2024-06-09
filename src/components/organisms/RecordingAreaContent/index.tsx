@@ -5,7 +5,7 @@ import RecordingTimeText from "../../atoms/RecordingTimeText";
 import RecordButton from "../../molecules/RecordButton";
 import HistoricList from "../HistoricList";
 import RecordingButtons from "../../molecules/RecordingButtons";
-import {HistoricItemType} from "@type/HistoricTypes";
+import {HistoricItemGroupedByMonthType} from "@type/HistoricTypes";
 
 type Props = {
   isRecording: boolean,
@@ -19,7 +19,7 @@ type Props = {
   onHistoryPress: () => void,
   energyValue: number,
   powerValue: number,
-  historic: HistoricItemType[]
+  historic: HistoricItemGroupedByMonthType
 }
 export default function RecordingAreaContent(
   {

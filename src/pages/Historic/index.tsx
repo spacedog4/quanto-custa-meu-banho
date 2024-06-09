@@ -8,26 +8,20 @@ import {
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import HistoricList from "../../components/organisms/HistoricList";
 import {Dimensions} from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {HistoricItemType} from "@type/HistoricTypes";
+import {HistoricItemGroupedByMonthType} from "@type/HistoricTypes";
+import {getHistoric} from "../../services/history";
 
 export default function HistoricPage({navigation}: NativeStackScreenProps<any>) {
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
-  const [historic, setHistoric] = useState<HistoricItemType[]>([])
+  const [historic, setHistoric] = useState<HistoricItemGroupedByMonthType>()
 
   const goBack = () => {
     navigation.goBack()
   }
 
   const updateHistoric = () => {
-    AsyncStorage.getItem('historic').then(
-      v => {
-        if (v) {
-          setHistoric(JSON.parse(v))
-        }
-      }
-    ).catch(err => console.error(err));
+    getHistoric().then(h => setHistoric(h))
   }
 
   useEffect(() => {
@@ -36,7 +30,7 @@ export default function HistoricPage({navigation}: NativeStackScreenProps<any>) 
     });
   }, [navigation])
 
-  return (
+  return historic && (
     <Container>
       <StatusBar style="light"/>
       <HistoricList size="normal" historic={historic} goBack={goBack} updateHistoric={updateHistoric}/>

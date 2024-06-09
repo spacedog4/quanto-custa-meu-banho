@@ -1,18 +1,20 @@
 import React, {useState} from 'react';
-import {Container} from "./style";
+import {Container, MonthTotal, MonthTotalText, MonthTotalValue} from "./style";
 import HistoricItem from "../../molecules/HistoricItem";
-import {Dimensions, FlatList, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
+import {Dimensions, FlatList, TouchableOpacity, TouchableWithoutFeedback, View, Text} from "react-native";
 import DownIcon from "../../atoms/DownIcon";
-import {HistoricItemType} from "@type/HistoricTypes";
+import {HistoricItemGroupedByMonthType, HistoricItemType} from "@type/HistoricTypes";
 import ModalHistoricDetails from "../../molecules/ModalHistoricDetails";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {mountHistoricKey} from "../../../services/history";
+import {formatMoney} from "../../../services/utils";
 
 
 type Props = {
   size: string,
-  historic: HistoricItemType[],
+  historic: HistoricItemGroupedByMonthType,
   goBack?: () => void,
-  updateHistoric: () => void
+  updateHistoric?: () => void
 }
 
 export default function HistoricList({size, historic, goBack, updateHistoric}: Props) {
@@ -22,50 +24,79 @@ export default function HistoricList({size, historic, goBack, updateHistoric}: P
 
   const openModalHistoricItem = (historicItem: HistoricItemType) => {
     setVisibleModal(true)
-    console.log(historicItem)
     setSelectedHistoricItem(historicItem)
   }
 
   const handleRemoveHistoric = async () => {
     if (!selectedHistoricItem) return;
-    const newHistoric = historic.filter(item => {
+
+    const key = mountHistoricKey(selectedHistoricItem.date);
+
+    let newHistoricGroupedByMonth = {...historic};
+
+    newHistoricGroupedByMonth[key] = historic[key].filter(item => {
       return item.date !== selectedHistoricItem.date
+    });
+
+    await AsyncStorage.setItem('historic', JSON.stringify(newHistoricGroupedByMonth));
+
+    if (updateHistoric) updateHistoric()
+  }
+
+  const monthFromKey = (key: string): string => {
+    return key.split('-')[0];
+  }
+
+  const getTotal = (historic: HistoricItemType[]): string => {
+    let total = 0
+
+    historic.forEach(item => {
+      total += item.value
     })
 
-    await AsyncStorage.setItem('historic', JSON.stringify(newHistoric));
-
-    updateHistoric()
+    return formatMoney(total)
   }
 
   return (
     <Container>
       {
         size !== 'small' &&
-        <TouchableWithoutFeedback onPress={goBack}>
-          <View style={{width, alignItems: 'center', justifyContent: 'center', padding: 20, marginBottom: 20}}>
-            <DownIcon/>
-          </View>
-        </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={goBack}>
+              <View style={{width, alignItems: 'center', justifyContent: 'center', padding: 20, marginBottom: 20}}>
+                  <DownIcon/>
+              </View>
+          </TouchableWithoutFeedback>
       }
-      <FlatList<HistoricItemType>
-        data={historic}
-        scrollEnabled={size !== 'small'}
-        fadingEdgeLength={300}
-        showsVerticalScrollIndicator={false}
-        renderItem={({item}) => (
-          size === 'small' ?
-            <HistoricItem
-              value={item.value}
-              date={item.date}
-            /> : <TouchableOpacity onPress={() => openModalHistoricItem(item)}>
-              <HistoricItem value={item.value} date={item.date}/>
-            </TouchableOpacity>
-        )}
-        style={
-          {height: height * 0.8, flexGrow: 0}
-        }
-      >
-      </FlatList>
+      {
+        Object.keys(historic).map(key => (
+          <View>
+            <MonthTotal>
+              <MonthTotalText>{monthFromKey(key)}</MonthTotalText>
+              <MonthTotalValue>{getTotal(historic[key])}</MonthTotalValue>
+            </MonthTotal>
+            <FlatList<HistoricItemType>
+              data={historic[key]}
+              key={key}
+              scrollEnabled={size !== 'small'}
+              fadingEdgeLength={300}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item}) => (
+                size === 'small' ?
+                  <HistoricItem
+                    value={item.value}
+                    date={item.date}
+                  /> : <TouchableOpacity onPress={() => openModalHistoricItem(item)}>
+                    <HistoricItem value={item.value} date={item.date}/>
+                  </TouchableOpacity>
+              )}
+              style={
+                {height: height * 0.8, flexGrow: 0}
+              }
+            >
+            </FlatList>
+          </View>
+        ))
+      }
       <ModalHistoricDetails
         visible={visibleModal}
         setVisible={setVisibleModal}
