@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Container, MonthTotal, MonthTotalText, MonthTotalValue} from "./style";
+import React, {useEffect, useState} from 'react';
+import {Container, HistoricMonth, MonthTotal, MonthTotalText, MonthTotalValue} from "./style";
 import HistoricItem from "../../molecules/HistoricItem";
 import {Dimensions, FlatList, TouchableOpacity, TouchableWithoutFeedback, View, Text} from "react-native";
 import DownIcon from "../../atoms/DownIcon";
@@ -67,36 +67,31 @@ export default function HistoricList({size, historic, goBack, updateHistoric}: P
               </View>
           </TouchableWithoutFeedback>
       }
-      {
-        Object.keys(historic).map(key => (
-          <View style={{flex: 1}}>
+      <FlatList
+        data={Object.keys(historic)}
+        scrollEnabled={size !== 'small'}
+        fadingEdgeLength={300}
+        showsVerticalScrollIndicator={false}
+        renderItem={({item}) => (
+          <HistoricMonth>
             <MonthTotal>
-              <MonthTotalText>{monthFromKey(key)}</MonthTotalText>
-              <MonthTotalValue>{getTotal(historic[key])}</MonthTotalValue>
+              <MonthTotalText>{monthFromKey(item)}</MonthTotalText>
+              <MonthTotalValue>{getTotal(historic[item])}</MonthTotalValue>
             </MonthTotal>
-            <FlatList<HistoricItemType>
-              data={historic[key]}
-              key={key}
-              scrollEnabled={size !== 'small'}
-              fadingEdgeLength={300}
-              showsVerticalScrollIndicator={false}
-              renderItem={({item}) => (
-                size === 'small' ?
-                  <HistoricItem
-                    value={item.value}
-                    date={item.date}
-                  /> : <TouchableOpacity onPress={() => openModalHistoricItem(item)}>
-                    <HistoricItem value={item.value} date={item.date}/>
-                  </TouchableOpacity>
-              )}
-              style={
-                {height: height * 0.8, flexGrow: 0}
-              }
-            >
-            </FlatList>
-          </View>
-        ))
-      }
+            {historic[item].map(historicItem => (
+              size == 'small' ?
+                <HistoricItem
+                  value={historicItem.value}
+                  date={historicItem.date}
+                /> :
+                <TouchableOpacity onPress={() => openModalHistoricItem(historicItem)}>
+                  <HistoricItem value={historicItem.value} date={historicItem.date}/>
+                </TouchableOpacity>
+            ))}
+          </HistoricMonth>
+        )}
+      >
+      </FlatList>
       <ModalHistoricDetails
         visible={visibleModal}
         setVisible={setVisibleModal}

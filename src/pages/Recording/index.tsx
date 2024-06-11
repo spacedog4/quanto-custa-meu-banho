@@ -86,9 +86,12 @@ export default function RecordingPage({navigation}: NativeStackScreenProps<any>)
       return;
     }
 
+    let d = new Date();
+    d.setMonth(d.getMonth() + 1);
+
     const historicItem = {
       value: totalValue,
-      date: new Date(),
+      date: d,
       shower: shower,
       energy: energy
     }

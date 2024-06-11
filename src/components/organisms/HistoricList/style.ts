@@ -6,6 +6,10 @@ export const Container = styled(View)`
     flex: 1;
 `
 
+export const HistoricMonth = styled(View)`
+    margin-bottom: 15px;
+`
+
 export const MonthTotal = styled(View)`
     background: #225687;
     margin-bottom: 10px;
