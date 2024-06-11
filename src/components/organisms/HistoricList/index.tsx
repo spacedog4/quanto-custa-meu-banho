@@ -69,7 +69,7 @@ export default function HistoricList({size, historic, goBack, updateHistoric}: P
       }
       {
         Object.keys(historic).map(key => (
-          <View>
+          <View style={{flex: 1}}>
             <MonthTotal>
               <MonthTotalText>{monthFromKey(key)}</MonthTotalText>
               <MonthTotalValue>{getTotal(historic[key])}</MonthTotalValue>

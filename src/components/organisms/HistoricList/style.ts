@@ -2,7 +2,8 @@ import styled from "styled-components";
 import {View, Text} from "react-native";
 
 export const Container = styled(View)`
-  align-items: center;
+    align-items: center;
+    flex: 1;
 `
 
 export const MonthTotal = styled(View)`
