@@ -104,6 +104,8 @@ export default function RecordingPage({navigation}: NativeStackScreenProps<any>)
 
     // Update historic database
     updateHistoric(historicClone)
+
+    setTotalValue(0)
   }
 
   return (
