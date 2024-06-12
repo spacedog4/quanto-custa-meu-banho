@@ -78,13 +78,17 @@ export default function HistoricList({size, historic, goBack, updateHistoric}: P
               <MonthTotalText>{monthFromKey(item)}</MonthTotalText>
               <MonthTotalValue>{getTotal(historic[item])}</MonthTotalValue>
             </MonthTotal>
-            {historic[item].map(historicItem => (
+            {historic[item].map((historicItem, index) => (
               size == 'small' ?
                 <HistoricItem
+                  key={`${item}-${index}`}
                   value={historicItem.value}
                   date={historicItem.date}
                 /> :
-                <TouchableOpacity onPress={() => openModalHistoricItem(historicItem)}>
+                <TouchableOpacity
+                  onPress={() => openModalHistoricItem(historicItem)}
+                  key={`${item}-${index}`}
+                >
                   <HistoricItem value={historicItem.value} date={historicItem.date}/>
                 </TouchableOpacity>
             ))}
