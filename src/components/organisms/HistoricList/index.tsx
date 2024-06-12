@@ -5,19 +5,17 @@ import {Dimensions, FlatList, TouchableOpacity, TouchableWithoutFeedback, View, 
 import DownIcon from "../../atoms/DownIcon";
 import {HistoricItemGroupedByMonthType, HistoricItemType} from "@type/HistoricTypes";
 import ModalHistoricDetails from "../../molecules/ModalHistoricDetails";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {mountHistoricKey} from "../../../services/history";
+import {mountHistoricKey, updateHistoric} from "../../../services/history";
 import {formatMoney} from "../../../services/utils";
-
 
 type Props = {
   size: string,
   historic: HistoricItemGroupedByMonthType,
   goBack?: () => void,
-  updateHistoric?: () => void
+  refreshHistoric?: () => void
 }
 
-export default function HistoricList({size, historic, goBack, updateHistoric}: Props) {
+export default function HistoricList({size, historic, goBack, refreshHistoric}: Props) {
   const [visibleModal, setVisibleModal] = useState(false)
   const {height, width} = Dimensions.get('window')
   const [selectedHistoricItem, setSelectedHistoricItem] = useState<HistoricItemType>()
@@ -32,15 +30,15 @@ export default function HistoricList({size, historic, goBack, updateHistoric}: P
 
     const key = mountHistoricKey(selectedHistoricItem.date);
 
-    let newHistoricGroupedByMonth = {...historic};
+    let historicClone = {...historic};
 
-    newHistoricGroupedByMonth[key] = historic[key].filter(item => {
+    historicClone[key] = historicClone[key].filter(item => {
       return item.date !== selectedHistoricItem.date
     });
 
-    await AsyncStorage.setItem('historic', JSON.stringify(newHistoricGroupedByMonth));
+    await updateHistoric(historicClone)
 
-    if (updateHistoric) updateHistoric()
+    if(refreshHistoric) refreshHistoric()
   }
 
   const monthFromKey = (key: string): string => {

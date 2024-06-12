@@ -33,7 +33,7 @@ export default function HistoricPage({navigation}: NativeStackScreenProps<any>) 
   return historic && (
     <Container>
       <StatusBar style="light"/>
-      <HistoricList size="normal" historic={historic} goBack={goBack} updateHistoric={updateHistoric}/>
+      <HistoricList size="normal" historic={historic} goBack={goBack} refreshHistoric={updateHistoric}/>
       <Background style={{
         width: windowWidth * 2,
         height: windowHeight,

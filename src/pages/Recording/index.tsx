@@ -86,12 +86,9 @@ export default function RecordingPage({navigation}: NativeStackScreenProps<any>)
       return;
     }
 
-    let d = new Date();
-    d.setMonth(d.getMonth() + 1);
-
     const historicItem = {
       value: totalValue,
-      date: d,
+      date: new Date(),
       shower: shower,
       energy: energy
     }
@@ -99,6 +96,9 @@ export default function RecordingPage({navigation}: NativeStackScreenProps<any>)
     // Update historic state
     const key = mountHistoricKey(new Date())
     let historicClone = {...historic}
+
+    if(!historicClone.hasOwnProperty(key)) historicClone[key] = []
+
     historicClone[key].unshift(historicItem)
     setHistoric(historicClone);
 
