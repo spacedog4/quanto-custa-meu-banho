@@ -1,4 +1,4 @@
-import {collection, getDocs} from "firebase/firestore";
+import {collection, getDocs, query, where, and} from "firebase/firestore";
 import {getFirestore} from "firebase/firestore";
 import {app} from './firebase';
 
@@ -9,10 +9,19 @@ export type EnergyDistributorType = {
   uf: string;
 };
 
-export const getEnergyDistributors = async () => {
+export const getEnergyDistributorsByUF = async (uf: string|null) => {
   const db = getFirestore(app);
-  const querySnapshot = await getDocs(collection(db, "energy_distributors"));
+  const energyDistributorsRef = collection(db, "energy_distributors");
 
+  let q;
+
+  if (uf) {
+    q = query(energyDistributorsRef, where('uf', '==', uf))
+  } else {
+    q = query(energyDistributorsRef)
+  }
+
+  const querySnapshot = await getDocs(q);
   const energyDistributors: EnergyDistributorType[] = [];
   querySnapshot.forEach((doc) => {
     let data = doc.data();

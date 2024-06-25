@@ -7,7 +7,7 @@ import ContinueButton from "../../components/molecules/ContinueButton";
 import {Keyboard, View} from "react-native";
 import BackgroundCircle from "../../components/atoms/BackgroundCircle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {EnergyType} from "../../types/EnergyTypes";
+import {EnergyType} from "@type/EnergyTypes";
 import {HeadingSubtitle} from "../ShowerForm/style";
 import EnergyBillMock from "../../components/atoms/EnergyBillMock";
 

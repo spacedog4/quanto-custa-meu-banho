@@ -3,8 +3,8 @@ import {View} from "react-native";
 import SelectInput, {OptionType} from "../../molecules/SelectInput";
 import axios from 'axios';
 import StyledCurrencyInput from "../../atoms/StyledCurrencyInput";
-import {EnergyType} from "../../../types/EnergyTypes";
-import {getEnergyDistributors} from "../../../services/energyDistributor";
+import {EnergyType, EnergyUfType} from "@type/EnergyTypes";
+import {getEnergyDistributorsByUF} from "../../../services/energyDistributor";
 
 export type ibgeUfOption = {
   id: number;
@@ -23,7 +23,7 @@ type Props = {
 }
 
 export default function EnergyFormArea({energy, updateEnergy}: Props) {
-  const [ufs, setUFs] = useState([]);
+  const [ufs, setUfs] = useState<EnergyUfType[]>([]);
   const [energyDistributors, setEnergyDistributors] =
     useState<OptionType[]>([]);
 
@@ -32,9 +32,26 @@ export default function EnergyFormArea({energy, updateEnergy}: Props) {
     updateEnergy({...energy})
   }
 
+  const loadEnergyDistributors = async () => {
+    const data = await getEnergyDistributorsByUF(energy.uf ? energy.uf.uf : null)
+    const energyDistributorsData = data.map(item => {
+      return {id: item.id, title: item.name};
+    });
+
+    setEnergyDistributors(energyDistributorsData)
+
+    if (energyDistributorsData.length == 1) {
+      energy.energyDistributor = energyDistributorsData[0];
+      updateEnergy({...energy})
+    }
+  }
+
   const handleSelectUF = async (item: OptionType) => {
-    energy.uf = item
+    energy.uf = ufs.find(uf => uf.id == item.id) ?? null;
+    energy.energyDistributor = null;
     updateEnergy({...energy})
+
+    await loadEnergyDistributors()
   }
 
   const handleSelectEnergyDistributor = async (item: OptionType) => {
@@ -43,39 +60,56 @@ export default function EnergyFormArea({energy, updateEnergy}: Props) {
   }
 
   useEffect(() => {
-    getEnergyDistributors().then(data => {
-      const energyDistributorsData = data.map(item => {
-        return {id: item.id, title: item.name};
-      });
-
-      setEnergyDistributors(energyDistributorsData)
-    });
-
     axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(({data}) => {
       const options = data.map((item: ibgeUfOption) => {
         return {
           id: item.id,
           uf: item.sigla,
-          title: item.nome
+          name: item.nome
         }
       });
 
-      setUFs(options);
+      setUfs(options);
     }).catch(err => {
       //TODO: exibir mensagem com modal de conexão para tentar novamente
       console.error(err)
     });
+
+    loadEnergyDistributors().then(() => {
+      if (energyDistributors.length == 1) {
+        energy.energyDistributor = energyDistributors[0];
+        updateEnergy({...energy})
+      }
+    })
   }, [])
+
+  const ufOptions = () => {
+    return ufs.map(uf => ({id: uf.id, title: uf.name}));
+  }
+
+  const initialUf = () => {
+    if (!energy.uf) return
+
+    const energyUfId = energy.uf.id;
+    const selectedUf = ufs.find(uf => uf.id == energyUfId)
+
+    if (!selectedUf) return;
+
+    return {
+      id: selectedUf.id,
+      title: selectedUf.name
+    }
+  }
 
   return ufs && energyDistributors && (
     <View>
       <View style={{marginBottom: 25}}>
         <SelectInput
           placeholder="Estado"
-          options={ufs}
+          options={ufOptions()}
           onChange={(v) => void handleSelectUF(v)}
           title="Estado"
-          initialOption={energy.uf}
+          value={initialUf()}
         ></SelectInput>
       </View>
 
@@ -85,7 +119,7 @@ export default function EnergyFormArea({energy, updateEnergy}: Props) {
           options={energyDistributors}
           onChange={(v) => void handleSelectEnergyDistributor(v)}
           title="Distribuidora"
-          initialOption={energy.energyDistributor}
+          value={energy.energyDistributor}
         ></SelectInput>
       </View>
 

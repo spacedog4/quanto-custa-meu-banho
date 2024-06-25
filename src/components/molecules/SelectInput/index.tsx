@@ -23,7 +23,7 @@ type Props = {
   onChange: (item: OptionType) => void;
   title: string;
   options: OptionType[];
-  initialOption?: OptionType | null
+  value?: OptionType | null
 };
 
 export type OptionType = {
@@ -31,7 +31,7 @@ export type OptionType = {
   title: string;
 };
 
-export default function SelectInput({placeholder, onChange, title, options, initialOption}: Props) {
+export default function SelectInput({placeholder, onChange, title, options, value}: Props) {
   const [visible, setVisible] = useState(false);
   const [q, setQ] = useState('');
   const [filteredOptions, setFilteredOptions] = useState<OptionType[]>([]);
@@ -54,12 +54,6 @@ export default function SelectInput({placeholder, onChange, title, options, init
   }, [options])
 
   useEffect(() => {
-    if (initialOption) {
-      setSelectedOption(initialOption)
-    }
-  }, [initialOption])
-
-  useEffect(() => {
     setFilteredOptions(options.filter(item => {
       return item.title.toLowerCase().includes(q.toLowerCase())
     }))
@@ -76,7 +70,7 @@ export default function SelectInput({placeholder, onChange, title, options, init
   return (
     <View>
       <SelectInputField
-        placeholder={selectedOption?.title ?? placeholder}
+        placeholder={value?.title ?? placeholder}
         onPress={onPress}
       ></SelectInputField>
       <Modal
