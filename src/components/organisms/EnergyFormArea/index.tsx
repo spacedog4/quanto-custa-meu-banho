@@ -4,6 +4,7 @@ import SelectInput, {OptionType} from "../../molecules/SelectInput";
 import axios from 'axios';
 import StyledCurrencyInput from "../../atoms/StyledCurrencyInput";
 import {EnergyType} from "../../../types/EnergyTypes";
+import {getEnergyDistributors} from "../../../services/energyDistributor";
 
 export type ibgeUfOption = {
   id: number;
@@ -23,9 +24,8 @@ type Props = {
 
 export default function EnergyFormArea({energy, updateEnergy}: Props) {
   const [ufs, setUFs] = useState([]);
-  const [energyDistributors] = useState<OptionType[]>([
-    {id: 1, title: 'Copel'}, {id: 2, title: 'Teste'}
-  ]);
+  const [energyDistributors, setEnergyDistributors] =
+    useState<OptionType[]>([]);
 
   const handleChangeEnergyValue = async (value: number | null) => {
     energy.energyValue = value
@@ -43,6 +43,14 @@ export default function EnergyFormArea({energy, updateEnergy}: Props) {
   }
 
   useEffect(() => {
+    getEnergyDistributors().then(data => {
+      const energyDistributorsData = data.map(item => {
+        return {id: item.id, title: item.name};
+      });
+
+      setEnergyDistributors(energyDistributorsData)
+    });
+
     axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(({data}) => {
       const options = data.map((item: ibgeUfOption) => {
         return {
@@ -59,7 +67,7 @@ export default function EnergyFormArea({energy, updateEnergy}: Props) {
     });
   }, [])
 
-  return ufs && (
+  return ufs && energyDistributors && (
     <View>
       <View style={{marginBottom: 25}}>
         <SelectInput

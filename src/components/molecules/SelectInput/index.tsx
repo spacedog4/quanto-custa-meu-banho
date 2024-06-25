@@ -27,7 +27,7 @@ type Props = {
 };
 
 export type OptionType = {
-  id: number;
+  id: string|number;
   title: string;
 };
 

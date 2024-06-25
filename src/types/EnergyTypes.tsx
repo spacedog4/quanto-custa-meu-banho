@@ -1,11 +1,11 @@
 export type EnergyType = {
   uf: {
-    id: number
+    id: string|number
     title: string
   } | null
   energyValue: number | null
   energyDistributor: {
-    id: number
+    id: string|number
     title: string
   } | null
 }
