@@ -1,5 +1,4 @@
-import {collection, getDocs, query, where, and} from "firebase/firestore";
-import {getFirestore} from "firebase/firestore";
+import {collection, doc, getDoc, getDocs, getFirestore, query, where} from "firebase/firestore";
 import {app} from './firebase';
 
 export type EnergyDistributorType = {
@@ -8,6 +7,12 @@ export type EnergyDistributorType = {
   name_clean: string;
   uf: string;
 };
+
+export const getEnergyDistributorsById = async (id: string|number) => {
+  const db = getFirestore(app);
+  const energyDistributorsRef = doc(collection(db, "energy_distributors"), id.toString());
+  return await getDoc(energyDistributorsRef);
+}
 
 export const getEnergyDistributorsByUF = async (uf: string|null) => {
   const db = getFirestore(app);

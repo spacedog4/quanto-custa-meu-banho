@@ -5,6 +5,7 @@ import axios from 'axios';
 import StyledCurrencyInput from "../../atoms/StyledCurrencyInput";
 import {EnergyType, EnergyUfType} from "@type/EnergyTypes";
 import {getEnergyDistributorsByUF} from "../../../services/energyDistributor";
+import {getEnergyValueByDistributor} from "../../../services/energyByDistributor";
 
 export type ibgeUfOption = {
   id: number;
@@ -42,6 +43,12 @@ export default function EnergyFormArea({energy, updateEnergy}: Props) {
 
     if (energyDistributorsData.length == 1) {
       energy.energyDistributor = energyDistributorsData[0];
+
+      const mostCommomValue = await getEnergyValueByDistributor(energy.energyDistributor.id);
+      if (mostCommomValue) {
+        energy.energyValue = mostCommomValue
+      }
+
       updateEnergy({...energy})
     }
   }
@@ -56,6 +63,12 @@ export default function EnergyFormArea({energy, updateEnergy}: Props) {
 
   const handleSelectEnergyDistributor = async (item: OptionType) => {
     energy.energyDistributor = item
+
+    const mostCommomValue = await getEnergyValueByDistributor(item.id);
+    if (mostCommomValue) {
+      energy.energyValue = mostCommomValue
+    }
+
     updateEnergy({...energy})
   }
 
